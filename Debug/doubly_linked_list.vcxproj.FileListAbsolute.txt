@@ -1,0 +1,2 @@
+C:\Users\Nicula Ionut\Desktop\projects\doubly_linked_list\Debug\doubly_linked_list.exe
+C:\Users\Nicula Ionut\Desktop\projects\doubly_linked_list\Debug\doubly_linked_list.pdb

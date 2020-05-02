@@ -1,0 +1,6 @@
+﻿  main.cpp
+C:\Users\Nicula Ionut\Desktop\projects\doubly_linked_list\main.cpp(37,1): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\Nicula Ionut\Desktop\projects\doubly_linked_list\main.cpp(45): message : see reference to class template instantiation 'bar<T>' being compiled
+C:\Users\Nicula Ionut\Desktop\projects\doubly_linked_list\main.cpp(37,1): warning C4183: 'barry': missing return type; assumed to be a member function returning 'int'
+C:\Users\Nicula Ionut\Desktop\projects\doubly_linked_list\main.cpp(41,1): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\Nicula Ionut\Desktop\projects\doubly_linked_list\main.cpp(41,1): warning C4183: 'barry': missing return type; assumed to be a member function returning 'int'
