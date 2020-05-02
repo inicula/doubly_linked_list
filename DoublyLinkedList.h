@@ -30,7 +30,7 @@ private:
 		{ }
 		Node(T&& data, Node* prev = nullptr, Node* next = nullptr)
 			:
-			data(data),
+			data(std::move(data)),
 			prev(prev),
 			next(next)
 		{ }
