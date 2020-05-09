@@ -192,6 +192,32 @@ public:
 public:
 	DoublyLinkedList() = default;
 
+	DoublyLinkedList(size_t count)
+	{
+		while(size_ < count)
+		{
+			push_back(T());
+		}
+	}
+
+	DoublyLinkedList(size_t count, const T& value)
+	{
+		while(size_ < count)
+		{
+			push_back(value);
+		}
+	}
+
+	template<typename OtherIt>
+	DoublyLinkedList(OtherIt i1, OtherIt i2)
+	{
+		while(i1 != i2)
+		{
+			push_back(*i1);
+			++i1;
+		}
+	}
+
 	DoublyLinkedList(const std::initializer_list<T>& i_l)
 	{
 		for(const auto& el : i_l)
@@ -226,6 +252,7 @@ public:
 		{
 			push_back(rhs);
 		}
+		return *this;
 	}
 
 	DoublyLinkedList& operator=(DoublyLinkedList&& rhs)
@@ -239,18 +266,12 @@ public:
 		rhs.first_ = nullptr;
 		rhs.last_ = nullptr;
 		rhs.size_ = 0;
+		return *this;
 	}
 
 	~DoublyLinkedList()
 	{
 		free_list();
-	}
-
-	friend void swap(DoublyLinkedList& lhs, DoublyLinkedList& rhs)
-	{
-		std::swap(lhs.first_, rhs.first_);
-		std::swap(lhs.last_, rhs.last_);
-		std::swap(lhs.size_, rhs.size_);
 	}
 
 	//insert element with constructor arguments in-place at the end
@@ -420,6 +441,15 @@ public:
 		return iterator(i1.ptr_);
 	}
 
+	void sort()
+	{
+		first_ = merge_sort(first_);
+		while(last_->next != nullptr)
+		{
+			last_ = last_->next;
+		}
+	}
+
 	iterator begin()
 	{
 		return iterator(first_);
@@ -516,6 +546,24 @@ public:
 		return value;
 	}
 
+	void resize(size_t new_size)
+	{
+		if(size_ < new_size)
+		{
+			while(size_ < new_size)
+			{
+				push_back(T());
+			}
+		}
+		else
+		{
+			while(size_ > new_size)
+			{
+				pop_back_d();
+			}
+		}
+	}
+
 	reference front()
 	{
 		assert(first_ != nullptr);
@@ -540,13 +588,14 @@ public:
 		return first_->last_;
 	}
 
-	auto size() const
+	size_t size() const
 	{
 		return size_;
 	}
 
 	void print(std::ostream& os = std::cout, char sep = ' ', char endline_ch = '\n') const
 	{
+		os << "Size: " << size_ << '\n';
 		auto head = first_;
 		while(head != nullptr)
 		{
@@ -558,6 +607,7 @@ public:
 
 	void print_reverse(std::ostream& os = std::cout, char sep = ' ', char endline_ch = '\n') const
 	{
+		os << "Size: " << size_ << '\n';
 		auto head = last_;
 		while(head != nullptr)
 		{
@@ -567,11 +617,6 @@ public:
 		os << endline_ch;
 	}
 
-	void pc()
-	{
-		Node* first = last_;
-		first = new Node(5);
-	}
 
 private:
 	void free_list()
@@ -585,6 +630,18 @@ private:
 		first_ = nullptr;
 		last_ = nullptr;
 		size_ = 0;
+	}
+
+	void pop_back_d()
+	{
+		auto to_delete = last_;
+		last_ = last_->prev;
+		delete to_delete;
+		if(last_ != nullptr)
+		{
+			last_->next = nullptr;
+		}
+		--size_;
 	}
 
 	void detach(Node* node)
@@ -606,6 +663,71 @@ private:
 		{
 			last_ = last_->prev;
 		}
+	}
+
+	Node* split_list(Node* start)
+	{
+		Node* aux = start;
+		while(start->next != nullptr && start->next->next != nullptr)
+		{
+			start = start->next->next;
+			aux = aux->next;
+		}
+		start = aux->next;
+		aux->next = nullptr;
+		return start;
+	}
+
+	Node* merge_lists(Node* l1, Node* l2)
+	{
+		auto dummy = new Node(0);
+		auto head = dummy;
+
+		while(l1 != nullptr && l2 != nullptr)
+		{
+			if(l1->data < l2->data)
+			{
+				head->next = l1;
+				head->next->prev = head;
+				l1 = l1->next;
+			}
+			else
+			{
+				head->next = l2;
+				head->next->prev = head;
+				l2 = l2->next;
+			}
+			head = head->next;
+		}
+
+		if(l1 != nullptr)
+		{
+			head->next = l1;
+			l1->prev = head;
+		}
+		else
+		{
+			head->next = l2;
+			l2->prev = head;
+		}
+
+		dummy = dummy->next;
+		delete dummy->prev;
+		dummy->prev = nullptr;
+		return dummy;
+	}
+
+	Node* merge_sort(Node* head)
+	{
+		if(head == nullptr || head->next == nullptr)
+		{
+			return head;
+		}
+		Node* s_half = split_list(head);
+		head = merge_sort(head);
+		s_half = merge_sort(s_half);
+
+		return merge_lists(head,s_half);
 	}
 
 private:
