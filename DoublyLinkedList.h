@@ -443,10 +443,13 @@ public:
 
 	void sort()
 	{
-		first_ = merge_sort(first_);
-		while(last_->next != nullptr)
+		if(first_ != nullptr)
 		{
-			last_ = last_->next;
+			first_ = merge_sort(first_);
+			while(last_->next != nullptr)
+			{
+				last_ = last_->next;
+			}
 		}
 	}
 
