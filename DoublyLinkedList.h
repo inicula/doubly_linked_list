@@ -466,7 +466,10 @@ public:
     std::vector<T> elements;
     elements.reserve(size_);
 
-    elements = std::vector<T>(cbegin(), cend());
+    for(const auto el : *this)
+    {
+      elements.emplace_back(el);
+    }
 
     std::sort(elements.begin(), elements.end());
     *this = DoublyLinkedList(elements.cbegin(), elements.cend());
