@@ -2,6 +2,8 @@
 #include <cassert>
 #include <iostream>
 #include <type_traits>
+#include <algorithm>
+#include <vector>
 
 template <typename>
 class reverse_list_iterator;
@@ -256,6 +258,29 @@ public:
 
   ~DoublyLinkedList() { free_list(); }
 
+  bool operator==(const DoublyLinkedList& rhs) const
+  {
+    if(size_ != rhs.size_)
+    {
+      return false;
+    }
+    auto it0 = cbegin();
+    auto it1 = rhs.cbegin();
+    auto end_it = const_iterator(nullptr);
+    while(it0 != end_it)
+    {
+      if(*it0 != *it1)
+      {
+        return false;
+      }
+      ++it0;
+      ++it1;
+    }
+    return true;
+  }
+
+  bool operator!=(const DoublyLinkedList& rhs) const { return !(*this == rhs); }
+
   // insert element with constructor arguments in-place at the end
   template <typename... U>
   void push_back(U&&... args)
@@ -433,6 +458,18 @@ public:
         last_ = last_->next;
       }
     }
+  }
+
+  // Copy elements to std::vector, then sort with STL algorithm
+  void quick_sort()
+  {
+    std::vector<T> elements;
+    elements.reserve(size_);
+
+    elements = std::vector<T>(cbegin(), cend());
+
+    std::sort(elements.begin(), elements.end());
+    *this = DoublyLinkedList(elements.cbegin(), elements.cend());
   }
 
   iterator begin() { return iterator(first_); }
