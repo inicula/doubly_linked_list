@@ -1,0 +1,21 @@
+﻿---
+AlignOperands: 'true'
+AllowAllConstructorInitializersOnNextLine: 'false'
+AlwaysBreakTemplateDeclarations: 'Yes'
+BreakBeforeBraces: Allman
+BreakConstructorInitializers: AfterColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+Language: Cpp
+PointerAlignment: Left
+SpaceBeforeCpp11BracedList: 'false'
+SpaceBeforeParens: Never
+Standard: Auto
+SortIncludes: 'false'
+AllowShortBlocksOnASingleLine: 'false'
+AllowShortCaseLabelsOnASingleLine: 'false'
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: None
+SpaceAfterTemplateKeyword: 'false'
+ColumnLimit: 95
+...

@@ -5,13 +5,13 @@
 #include <algorithm>
 #include <vector>
 
-template <typename>
+template<typename>
 class reverse_list_iterator;
 
-template <typename>
+template<typename>
 class DoublyLinkedList;
 
-template <typename List, bool is_const>
+template<typename List, bool is_const>
 class list_iterator
 {
 public:
@@ -21,32 +21,38 @@ public:
   using iterator_category = typename std::bidirectional_iterator_tag;
   using value_type = typename List::value_type;
   using difference_type = typename List::difference_type;
-  using pointer =
-      typename std::conditional_t<is_const, typename List::const_pointer,
-                                  typename List::pointer>;
-  using reference =
-      typename std::conditional_t<is_const, typename List::const_reference,
-                                  typename List::reference>;
+  using pointer = typename std::conditional_t<is_const, typename List::const_pointer,
+                                              typename List::pointer>;
+  using reference = typename std::conditional_t<is_const, typename List::const_reference,
+                                                typename List::reference>;
   using alloc_type = typename List::alloc_type;
 
 public:
-  explicit list_iterator(alloc_type ptr) : ptr_(ptr) {}
+  explicit list_iterator(alloc_type ptr) : ptr_(ptr)
+  {
+  }
 
-  template <typename OtherIt>
+  template<typename OtherIt>
   bool operator==(const OtherIt& rhs) const
   {
     return ptr_ == rhs.ptr_;
   }
 
-  template <typename OtherIt>
+  template<typename OtherIt>
   bool operator!=(const OtherIt& rhs) const
   {
     return ptr_ != rhs.ptr_;
   }
 
-  reference operator*() const { return ptr_->data; }
+  reference operator*() const
+  {
+    return ptr_->data;
+  }
 
-  pointer operator->() const { return &(ptr_->data); }
+  pointer operator->() const
+  {
+    return &(ptr_->data);
+  }
 
   list_iterator& operator++()
   {
@@ -79,7 +85,7 @@ private:
 };
 
 // wraps regular iterator to function as reversed
-template <typename It>
+template<typename It>
 class reverse_list_iterator
 {
 public:
@@ -91,7 +97,9 @@ public:
   using alloc_type = typename It::alloc_type;
 
 public:
-  explicit reverse_list_iterator(alloc_type ptr) : it(ptr) {}
+  explicit reverse_list_iterator(alloc_type ptr) : it(ptr)
+  {
+  }
 
   bool operator==(const reverse_list_iterator& rhs) const
   {
@@ -103,9 +111,15 @@ public:
     return it != rhs.it;
   }
 
-  reference operator*() const { return it.operator*(); }
+  reference operator*() const
+  {
+    return it.operator*();
+  }
 
-  pointer operator->() const { return it.operator->(); }
+  pointer operator->() const
+  {
+    return it.operator->();
+  }
 
   reverse_list_iterator& operator++()
   {
@@ -137,7 +151,7 @@ private:
   It it;
 };
 
-template <typename T>
+template<typename T>
 class DoublyLinkedList
 {
 private:
@@ -196,7 +210,7 @@ public:
     }
   }
 
-  template <typename OtherIt>
+  template<typename OtherIt>
   DoublyLinkedList(OtherIt i1, OtherIt i2)
   {
     while(i1 != i2)
@@ -256,7 +270,10 @@ public:
     return *this;
   }
 
-  ~DoublyLinkedList() { free_list(); }
+  ~DoublyLinkedList()
+  {
+    free_list();
+  }
 
   bool operator==(const DoublyLinkedList& rhs) const
   {
@@ -279,10 +296,13 @@ public:
     return true;
   }
 
-  bool operator!=(const DoublyLinkedList& rhs) const { return !(*this == rhs); }
+  bool operator!=(const DoublyLinkedList& rhs) const
+  {
+    return !(*this == rhs);
+  }
 
   // insert element with constructor arguments in-place at the end
-  template <typename... U>
+  template<typename... U>
   void push_back(U&&... args)
   {
     if(first_ == nullptr)
@@ -299,7 +319,7 @@ public:
   }
 
   // insert element at the end
-  template <typename U>
+  template<typename U>
   void push_back(U&& value)
   {
     if(first_ == nullptr)
@@ -316,7 +336,7 @@ public:
   }
 
   // insert element with constructor arguments in-place at the beginning
-  template <typename... U>
+  template<typename... U>
   void push_front(U&&... args)
   {
     if(first_ == nullptr)
@@ -333,7 +353,7 @@ public:
   }
 
   // insert element at the beginning
-  template <typename U>
+  template<typename U>
   void push_front(U&& value)
   {
     if(first_ == nullptr)
@@ -475,19 +495,40 @@ public:
     *this = DoublyLinkedList(elements.cbegin(), elements.cend());
   }
 
-  iterator begin() { return iterator(first_); }
+  iterator begin()
+  {
+    return iterator(first_);
+  }
 
-  const_iterator begin() const { return const_iterator(first_); }
+  const_iterator begin() const
+  {
+    return const_iterator(first_);
+  }
 
-  const_iterator cbegin() const { return const_iterator(first_); }
+  const_iterator cbegin() const
+  {
+    return const_iterator(first_);
+  }
 
-  iterator end() { return iterator(nullptr); }
+  iterator end()
+  {
+    return iterator(nullptr);
+  }
 
-  const_iterator end() const { return const_iterator(nullptr); }
+  const_iterator end() const
+  {
+    return const_iterator(nullptr);
+  }
 
-  const_iterator cend() const { return const_iterator(nullptr); }
+  const_iterator cend() const
+  {
+    return const_iterator(nullptr);
+  }
 
-  reverse_iterator rbegin() { return reverse_iterator(last_); }
+  reverse_iterator rbegin()
+  {
+    return reverse_iterator(last_);
+  }
 
   const_reverse_iterator rbegin() const
   {
@@ -499,7 +540,10 @@ public:
     return const_reverse_iterator(last_);
   }
 
-  reverse_iterator rend() { return reverse_iterator(nullptr); }
+  reverse_iterator rend()
+  {
+    return reverse_iterator(nullptr);
+  }
 
   const_reverse_iterator rend() const
   {
@@ -589,10 +633,12 @@ public:
     return first_->last_;
   }
 
-  size_t size() const { return size_; }
+  size_t size() const
+  {
+    return size_;
+  }
 
-  void print(std::ostream& os = std::cout, char sep = ' ',
-             char endline_ch = '\n') const
+  void print(std::ostream& os = std::cout, char sep = ' ', char endline_ch = '\n') const
   {
     os << "Size: " << size_ << '\n';
     auto head = first_;
